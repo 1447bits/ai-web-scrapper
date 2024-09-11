@@ -5,7 +5,7 @@ from modules.scrape import (
     clean_body_content
 )
 
-from modules.llm import split_dom_content, parse_with_ollama
+from modules.llm import split_dom_content, parse_with_ollama, parse_with_groq
 
 st.title("AI Web Scrapper")
 url = st.text_input("Enter web Url please :)")
@@ -31,6 +31,6 @@ if "dom_content" in st.session_state:
             st.write("parsing the content")
 
             dom_chunks = split_dom_content(st.session_state.dom_content)
-            result = parse_with_ollama(dom_chunks, parse_description)
+            result = parse_with_groq(dom_chunks, parse_description)
 
             st.write(result)

@@ -8,6 +8,7 @@ def split_dom_content(dom_content, max_len=6000):
 
 from langchain_ollama import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
 
 
 template = (
@@ -19,9 +20,11 @@ template = (
     "4. **Direct Data Only:** Your output should contain only the data that is explicitly requested, with no other text."
 )
 
-model = OllamaLLM(model='llama3.1')
 
 def parse_with_ollama(dom_chunks, parse_description):
+
+    model = OllamaLLM(model='llama3.1')
+
     prompt = ChatPromptTemplate.from_template(template)
 
     chain = prompt | model
@@ -30,7 +33,42 @@ def parse_with_ollama(dom_chunks, parse_description):
 
     for i, chunk in enumerate(dom_chunks, start=1):
         response = chain.invoke({"dom_content":chunk, "parse_description":parse_description})
-        print(f"parsed batch {i} of {len(dom_chunks)}")
-        parsed_results.append(response)
-    
+
+        parser=StrOutputParser()
+        parsed_result = parser.invoke(response)
+        parsed_results.append(parsed_result)
+
+    return "\n".join(parsed_results)
+
+
+# ------------------------------------------------------------
+
+import os
+from langchain_groq import ChatGroq
+from dotenv import load_dotenv
+
+
+def parse_with_groq(dom_chunks, parse_description):
+
+    load_dotenv()
+
+    groq_api_key=os.getenv("groq_api_key")
+    model=ChatGroq(model="Gemma2-9b-It",groq_api_key=groq_api_key)
+
+    prompt = ChatPromptTemplate.from_template(template)
+
+    chain = prompt | model
+
+    parsed_results = []
+
+    for i, chunk in enumerate(dom_chunks, start=1):
+
+        response = chain.invoke({"dom_content":chunk, "parse_description":parse_description})
+
+        # print(f"parsed batch {i} of {len(dom_chunks)}")
+        
+        parser=StrOutputParser()
+        parsed_result = parser.invoke(response)
+        parsed_results.append(parsed_result)
+
     return "\n".join(parsed_results)
