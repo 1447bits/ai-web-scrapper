@@ -1,19 +1,26 @@
-import selenium.webdriver as webdriver
+# import selenium.webdriver as webdriver
+from selenium import webdriver  
 from selenium.webdriver.chrome.service import Service
 
 def scrape_website(website):
-    print("launching chrome browser")
+    # print("launching chrome browser")
 
-    chrome_driver_path = "drivers/chromedriver-linux64/chromedriver"
+    # chrome_driver_path = "drivers/chromedriver-linux64/chromedriver"
+    # options = webdriver.ChromeOptions()
+    # driver = webdriver.Chrome(service=Service(chrome_driver_path), options=options)
+
     options = webdriver.ChromeOptions()
-    driver = webdriver.Chrome(service=Service(chrome_driver_path), options=options)
+    options.add_argument("headless") 
 
     try:
-        driver.get(website)
-        print("page loaded...")
-        html = driver.page_source
+        with webdriver.Chrome(options=options) as driver: 
 
-        return html
+            driver.get(website)
+            html = driver.page_source
+            page_html = html
+            
+        return page_html
+        
     finally:
         driver.quit()
 
