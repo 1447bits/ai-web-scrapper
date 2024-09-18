@@ -3,3 +3,5 @@
 
 # extras
 tasks
+.main-env
+.vscode

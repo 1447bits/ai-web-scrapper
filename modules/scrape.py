@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
 def scrape_website(website):
+
     # print("launching chrome browser")
 
     # chrome_driver_path = "drivers/chromedriver-linux64/chromedriver"
@@ -18,12 +19,13 @@ def scrape_website(website):
             driver.get(website)
             html = driver.page_source
             page_html = html
-            
+                
         return page_html
         
     finally:
         driver.quit()
 
+    
 
 # -------------------
 

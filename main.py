@@ -11,7 +11,7 @@ st.title("AI Web Scrapper")
 url = st.text_input("Enter web Url please :)")
 
 if st.button("scrape site"):
-    st.write("scrapping the website")
+    st.write("scrapping the website...")
 
     res = scrape_website(url)
     body_content = extract_body_content(res)
