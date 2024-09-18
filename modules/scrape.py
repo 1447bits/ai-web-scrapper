@@ -23,7 +23,8 @@ def scrape_website(website):
         return page_html
         
     finally:
-        driver.quit()
+        # driver.quit()
+        pass
 
     
 
